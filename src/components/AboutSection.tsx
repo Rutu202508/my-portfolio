@@ -40,7 +40,7 @@ export function AboutSection() {
           <SectionHeading
             kicker="About Me"
             title="Aspiring Software Developer"
-            subtitle="Grounded in core computer engineering principles and focused on practical software creation."
+            subtitle="Passionate about technology, problem-solving, and building innovative applications. Always eager to learn and explore new technologies."
           />
         </Reveal>
 

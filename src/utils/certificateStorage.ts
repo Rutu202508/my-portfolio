@@ -11,6 +11,7 @@ export interface CertificateRecord {
 
 export interface CertificateWithUrl extends CertificateRecord {
   imageUrl?: string;
+  category?: string;
   issuer?: string;
   issuingOrganization?: string;
   date?: string;

@@ -37,7 +37,7 @@ export function CertificatesSection() {
         setCertificates(loaded);
       })
       .catch(() => {
-        // Keep existing empty state if storage cannot be read
+        // Keep current state if storage cannot be read
       })
       .finally(() => {
         if (isMounted) setIsLoading(false);
@@ -58,8 +58,8 @@ export function CertificatesSection() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [previewCert]);
 
-  const getIssuer = (cert: CertificateWithUrl) =>
-    cert.issuer || cert.issuingOrganization || '';
+  const getCategoryOrIssuer = (cert: CertificateWithUrl) =>
+    cert.issuer || cert.issuingOrganization || cert.category || '';
   const getDate = (cert: CertificateWithUrl) =>
     cert.date || cert.completionDate || '';
 
@@ -101,7 +101,7 @@ export function CertificatesSection() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
             {certificates.map((cert, idx) => {
-              const issuer = getIssuer(cert);
+              const metaLabel = getCategoryOrIssuer(cert);
               const date = getDate(cert);
 
               return (
@@ -132,10 +132,10 @@ export function CertificatesSection() {
                     {/* Read-Only Card Details */}
                     <div className="p-6 flex-1 flex flex-col justify-between">
                       <div>
-                        {(issuer || date) && (
+                        {(metaLabel || date) && (
                           <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-[#A6B0C3] mb-2">
-                            {issuer && <span>{issuer}</span>}
-                            {issuer && date && <span aria-hidden="true">·</span>}
+                            {metaLabel && <span>{metaLabel}</span>}
+                            {metaLabel && date && <span aria-hidden="true">·</span>}
                             {date && <span>{date}</span>}
                           </div>
                         )}
@@ -222,10 +222,12 @@ export function CertificatesSection() {
                 )}
               </div>
 
-              {(getIssuer(previewCert) || getDate(previewCert)) && (
+              {(getCategoryOrIssuer(previewCert) || getDate(previewCert)) && (
                 <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-[#A6B0C3]">
-                  {getIssuer(previewCert) && <span>{getIssuer(previewCert)}</span>}
-                  {getIssuer(previewCert) && getDate(previewCert) && (
+                  {getCategoryOrIssuer(previewCert) && (
+                    <span>{getCategoryOrIssuer(previewCert)}</span>
+                  )}
+                  {getCategoryOrIssuer(previewCert) && getDate(previewCert) && (
                     <span aria-hidden="true">·</span>
                   )}
                   {getDate(previewCert) && <span>{getDate(previewCert)}</span>}
