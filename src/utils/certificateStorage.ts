@@ -1,4 +1,13 @@
-import { CertificateRecord } from '../data/portfolio';
+export interface CertificateRecord {
+  id: string;
+  title: string;
+  description?: string;
+  imageKey?: string;
+  imageFileName?: string;
+  imageFileSize?: number;
+  createdAt?: number;
+  updatedAt?: number;
+}
 
 export interface CertificateWithUrl extends CertificateRecord {
   imageUrl?: string;
