@@ -1,39 +1,21 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Award, Eye, X } from 'lucide-react';
 import {
   CertificateWithUrl,
   loadCertificatesWithImages,
 } from '../utils/certificateStorage';
-import { Reveal, SectionHeading } from './SectionUI';
+import { SectionHeading } from './SectionUI';
 
 export function CertificatesSection() {
   const [certificates, setCertificates] = useState<CertificateWithUrl[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [previewCert, setPreviewCert] = useState<CertificateWithUrl | null>(null);
 
-  const activeUrlsRef = useRef<string[]>([]);
-
-  const revokeActiveUrls = useCallback((urls: string[]) => {
-    urls.forEach((url) => {
-      if (url.startsWith('blob:')) {
-        URL.revokeObjectURL(url);
-      }
-    });
-  }, []);
-
   useEffect(() => {
     let isMounted = true;
     loadCertificatesWithImages()
       .then((loaded) => {
-        if (!isMounted) {
-          revokeActiveUrls(
-            loaded.map((c) => c.imageUrl).filter((u): u is string => Boolean(u))
-          );
-          return;
-        }
-        activeUrlsRef.current = loaded
-          .map((c) => c.imageUrl)
-          .filter((u): u is string => Boolean(u));
+        if (!isMounted) return;
         setCertificates(loaded);
       })
       .catch(() => {
@@ -45,9 +27,8 @@ export function CertificatesSection() {
 
     return () => {
       isMounted = false;
-      revokeActiveUrls(activeUrlsRef.current);
     };
-  }, [revokeActiveUrls]);
+  }, []);
 
   useEffect(() => {
     if (!previewCert) return;
@@ -69,13 +50,11 @@ export function CertificatesSection() {
       className="py-16 sm:py-24 bg-white dark:bg-[#10182B] border-y border-slate-200/70 dark:border-white/10"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Reveal>
-          <SectionHeading
-            kicker="Certifications"
-            title="Certificates & learning credentials"
-            subtitle="Verified learning credentials and course completions supporting my software engineering journey."
-          />
-        </Reveal>
+        <SectionHeading
+          kicker="Certifications"
+          title="Certificates & learning credentials"
+          subtitle="Verified learning credentials and course completions supporting my software engineering journey."
+        />
 
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -100,70 +79,71 @@ export function CertificatesSection() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
-            {certificates.map((cert, idx) => {
+            {certificates.map((cert) => {
               const metaLabel = getCategoryOrIssuer(cert);
               const date = getDate(cert);
 
               return (
-                <Reveal key={cert.id} delay={idx * 0.05}>
-                  <article className="group h-full flex flex-col rounded-2xl bg-slate-50 dark:bg-[#121D32] border border-slate-200 dark:border-white/10 overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7C3AED]/50 dark:hover:border-[#22D3EE]/45 hover:shadow-xl hover:shadow-[#8B5CF6]/10">
-                    {/* Clickable Certificate Image Thumbnail */}
-                    <button
-                      type="button"
-                      onClick={() => setPreviewCert(cert)}
-                      aria-label={`View ${cert.title} certificate`}
-                      className="relative aspect-[16/10] w-full bg-slate-100 dark:bg-[#080D1A] border-b border-slate-200 dark:border-white/10 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#8B5CF6]"
-                    >
-                      {cert.imageUrl ? (
-                        <img
-                          src={cert.imageUrl}
-                          alt={`${cert.title} certificate`}
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-slate-500 dark:text-[#A6B0C3]">
-                          <Award className="w-8 h-8 text-[#7C3AED] dark:text-[#22D3EE] mb-2" />
-                          <span className="text-xs font-medium">{cert.title}</span>
+                <article
+                  key={cert.id}
+                  className="group h-full flex flex-col rounded-2xl bg-slate-50 dark:bg-[#121D32] border border-slate-200 dark:border-white/10 overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:border-[#7C3AED]/50 dark:hover:border-[#22D3EE]/45 hover:shadow-xl hover:shadow-[#8B5CF6]/10"
+                >
+                  {/* Clickable Certificate Image Thumbnail */}
+                  <button
+                    type="button"
+                    onClick={() => setPreviewCert(cert)}
+                    aria-label={`View ${cert.title} certificate`}
+                    className="relative aspect-[16/10] w-full bg-slate-100 dark:bg-[#080D1A] border-b border-slate-200 dark:border-white/10 overflow-hidden cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#8B5CF6]"
+                  >
+                    {cert.imageUrl ? (
+                      <img
+                        src={cert.imageUrl}
+                        alt={`${cert.title} certificate`}
+                        referrerPolicy="no-referrer"
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-slate-500 dark:text-[#A6B0C3]">
+                        <Award className="w-8 h-8 text-[#7C3AED] dark:text-[#22D3EE] mb-2" />
+                        <span className="text-xs font-medium">{cert.title}</span>
+                      </div>
+                    )}
+                  </button>
+
+                  {/* Read-Only Card Details */}
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      {(metaLabel || date) && (
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-[#A6B0C3] mb-2">
+                          {metaLabel && <span>{metaLabel}</span>}
+                          {metaLabel && date && <span aria-hidden="true">·</span>}
+                          {date && <span>{date}</span>}
                         </div>
                       )}
-                    </button>
 
-                    {/* Read-Only Card Details */}
-                    <div className="p-6 flex-1 flex flex-col justify-between">
-                      <div>
-                        {(metaLabel || date) && (
-                          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-[#A6B0C3] mb-2">
-                            {metaLabel && <span>{metaLabel}</span>}
-                            {metaLabel && date && <span aria-hidden="true">·</span>}
-                            {date && <span>{date}</span>}
-                          </div>
-                        )}
+                      <h3 className="text-lg font-semibold text-slate-900 dark:text-[#F8FAFC] leading-snug">
+                        {cert.title}
+                      </h3>
 
-                        <h3 className="text-lg font-semibold text-slate-900 dark:text-[#F8FAFC] leading-snug">
-                          {cert.title}
-                        </h3>
-
-                        {cert.description && (
-                          <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-[#A6B0C3]">
-                            {cert.description}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="mt-6 pt-4 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-start">
-                        <button
-                          type="button"
-                          onClick={() => setPreviewCert(cert)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-white dark:bg-[#080D1A] border border-slate-300 dark:border-white/15 text-slate-800 dark:text-[#F8FAFC] hover:border-[#7C3AED]/60 dark:hover:border-[#22D3EE]/50 transition-colors cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6]"
-                        >
-                          <Eye className="w-4 h-4 text-[#7C3AED] dark:text-[#22D3EE]" />
-                          <span>View Certificate</span>
-                        </button>
-                      </div>
+                      {cert.description && (
+                        <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-[#A6B0C3]">
+                          {cert.description}
+                        </p>
+                      )}
                     </div>
-                  </article>
-                </Reveal>
+
+                    <div className="mt-6 pt-4 border-t border-slate-200/80 dark:border-white/10 flex items-center justify-start">
+                      <button
+                        type="button"
+                        onClick={() => setPreviewCert(cert)}
+                        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium bg-white dark:bg-[#080D1A] border border-slate-300 dark:border-white/15 text-slate-800 dark:text-[#F8FAFC] hover:border-[#7C3AED]/60 dark:hover:border-[#22D3EE]/50 transition-colors cursor-pointer whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8B5CF6]"
+                      >
+                        <Eye className="w-4 h-4 text-[#7C3AED] dark:text-[#22D3EE]" />
+                        <span>View Certificate</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
               );
             })}
           </div>
