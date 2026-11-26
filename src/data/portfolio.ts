@@ -27,14 +27,6 @@ export interface ServiceItem {
   focusAreas: string[];
 }
 
-export interface CertificateItem {
-  id: string;
-  title: string;
-  category: string;
-  description: string;
-  imageUrl?: string;
-}
-
 export interface EducationItem {
   id: string;
   degree: string;
@@ -266,23 +258,6 @@ export const PROJECT_FILTERS: Array<'All Projects' | ProjectCategory> = [
   'Cloud Projects',
 ];
 
-export const CERTIFICATES_LIST: CertificateItem[] = [
-  {
-    id: 'aws-internship',
-    title: 'AWS Internship',
-    category: 'Internship Certification',
-    description: 'Completed internship program focused on foundational cloud computing concepts.',
-    imageUrl: '',
-  },
-  {
-    id: 'linkedin-learning',
-    title: 'LinkedIn Learning',
-    category: 'Professional Learning',
-    description: 'Completed structured online coursework through LinkedIn Learning.',
-    imageUrl: '',
-  },
-];
-
 export const EDUCATION_TIMELINE: EducationItem[] = [
   {
     id: 'btech-cse',
@@ -291,14 +266,13 @@ export const EDUCATION_TIMELINE: EducationItem[] = [
     periodOrYear: 'Second Year',
     status: 'Current Education',
     highlights: [
-      'Pursuing undergraduate studies in Computer Science Engineering.',
-      'Building foundations in programming, software development, cloud computing, and cybersecurity.',
+      'Pursuing B.Tech in Computer Engineering',
     ],
   },
   {
     id: 'diploma-ce',
     degree: 'Diploma in Computer Engineering',
-    institution: 'Computer Engineering Program',
+    institution: 'Maharashtra State Board of Technical Education',
     periodOrYear: 'Completed',
     status: 'Previous Education',
     highlights: [

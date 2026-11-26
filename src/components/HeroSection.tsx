@@ -120,10 +120,6 @@ export function HeroSection({ onOpenResume }: HeroSectionProps) {
               )}
             </div>
 
-            <p className="mt-5 text-base sm:text-lg leading-relaxed text-slate-600 dark:text-[#A6B0C3] max-w-2xl mx-auto lg:mx-0">
-              “{PERSONAL_INFO.tagline}”
-            </p>
-
             {/* Unboxed Metadata Line */}
             <div className="mt-5 flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-xs sm:text-sm text-slate-500 dark:text-[#A6B0C3]">
               <span>{PERSONAL_INFO.college}</span>

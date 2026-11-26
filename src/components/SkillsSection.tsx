@@ -27,7 +27,6 @@ const ICON_MAP: Record<SkillCategory['iconName'], typeof Code2> = {
 
 export function SkillsSection() {
   const confirmedCategories = SKILL_CATEGORIES.filter((c) => c.items.length > 0);
-  const expandingCategories = SKILL_CATEGORIES.filter((c) => c.items.length === 0);
 
   return (
     <section id="skills" className="py-16 sm:py-24 bg-slate-50 dark:bg-[#080D1A]">
@@ -69,28 +68,6 @@ export function SkillsSection() {
                       </li>
                     ))}
                   </ul>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
-
-        {/* Additional Transparent Categories (No False Proficiency Claims) */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {expandingCategories.map((category, idx) => {
-            const Icon = ICON_MAP[category.iconName];
-            return (
-              <Reveal key={category.id} delay={idx * 0.04}>
-                <div className="h-full rounded-2xl bg-white/75 dark:bg-[#121D32]/70 border border-dashed border-slate-300 dark:border-white/15 p-5 transition-colors duration-200 hover:border-[#7C3AED]/45 dark:hover:border-[#22D3EE]/40">
-                  <div className="flex items-center gap-2.5 mb-2.5">
-                    <Icon className="w-4 h-4 text-[#7C3AED] dark:text-[#22D3EE] shrink-0" />
-                    <h3 className="text-sm font-semibold text-slate-900 dark:text-[#F8FAFC]">
-                      {category.title}
-                    </h3>
-                  </div>
-                  <p className="text-xs leading-relaxed text-slate-600 dark:text-[#A6B0C3]">
-                    {category.emptyNote}
-                  </p>
                 </div>
               </Reveal>
             );

@@ -6,7 +6,6 @@
 import { useEffect, useState } from 'react';
 import { MotionConfig } from 'motion/react';
 import { AboutSection } from './components/AboutSection';
-import { CertificatesSection } from './components/CertificatesSection';
 import { ContactSection } from './components/ContactSection';
 import { EducationSection } from './components/EducationSection';
 import { Footer } from './components/Footer';
@@ -66,7 +65,6 @@ export default function App() {
           <SkillsSection />
           <ServicesSection />
           <ProjectsSection />
-          <CertificatesSection />
           <EducationSection />
           <ContactSection />
         </main>

@@ -4,7 +4,10 @@ import { Reveal, SectionHeading } from './SectionUI';
 
 export function EducationSection() {
   return (
-    <section id="education" className="py-16 sm:py-24 bg-slate-50 dark:bg-[#080D1A]">
+    <section
+      id="education"
+      className="py-16 sm:py-24 bg-slate-50 dark:bg-[#080D1A] border-t border-slate-200/70 dark:border-white/10"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionHeading
